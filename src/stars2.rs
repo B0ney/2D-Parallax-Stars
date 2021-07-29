@@ -2,7 +2,6 @@ use rand::{thread_rng,Rng};
 
 /*
 My first attempt at data oriented design.
-
 */
 
 pub struct Stars {
@@ -58,7 +57,6 @@ impl Stars {
             *x += dx / *z;
 
             if *x > self.width {*x = 0.0} else if *x < 0.0 {*x = self.width};
-
 
             *y += dy / *z;
             
