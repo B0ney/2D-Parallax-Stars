@@ -6,6 +6,7 @@ My first attempt at data oriented design.
 
 pub struct Stars {
     pub stars: Vec<(f32, f32, f32)>,
+    // colors: Vec>
     width: f32,
     height: f32,
 }
@@ -18,9 +19,12 @@ impl Stars {
         for _i in 0..number_of_stars {
             stars.push(
                 (
-                    rng.gen_range(0.0..width),
-                    rng.gen_range(0.0..height),
-                    rng.gen_range(0.5..15.0f32)
+                    // rng.gen_range(-width..width),
+                    // rng.gen_range(-height..height),
+                    // rng.gen_range(0.2..100.0)
+                    rng.gen_range(-1.0..1.0),
+                    rng.gen_range(-1.0..1.0),
+                    rng.gen_range(-1.0..1.0),
                 )
             )
         };
@@ -38,9 +42,9 @@ impl Stars {
         for _ in 0..amount{
             self.stars.push(
                 (
-                    rng.gen_range(0.0..self.width),
-                    rng.gen_range(0.0..self.height),
-                    rng.gen_range(0.5..15.0f32)
+                    rng.gen_range(-1.0..1.0),
+                    rng.gen_range(-1.0..1.0),
+                    rng.gen_range(-1.0..1.0),
                 )            
             )
         }
@@ -54,13 +58,13 @@ impl Stars {
     pub fn step(&mut self, dx: f32, dy: f32) {
         for (x, y, z) in self.stars.iter_mut() 
         {
-            *x += dx / *z;
+            *x += dx / (*z * 5.0).abs();
 
-            if *x > self.width {*x = 0.0} else if *x < 0.0 {*x = self.width};
+            if *x > 1.0 {*x = -1.0} else if *x < -1.0 {*x = 1.0};
 
-            *y += dy / *z;
+            *y += dy / (*z * 5.0).abs();
             
-            if *y > self.height {*y = 0.0} else if *y < 0.0 {*y = self.height};
+            if *y > 1.0 {*y = -1.0} else if *y < -1.0 {*y = 1.0};
         }
     }
 }
