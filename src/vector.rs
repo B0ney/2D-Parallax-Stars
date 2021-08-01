@@ -1,7 +1,6 @@
 use std::ops::Sub;
 use std::convert::From;
 
-
 pub struct Matrix {
     m: [[f32;4];4]
 }
@@ -40,10 +39,6 @@ impl Vec2D {
         }
     }
 }
-// pub struct Mat4x4 {
-//     m: [[f32;4];4],
-// }
-
 impl Vec3D {
     pub fn new(x:f32, y:f32, z:f32) -> Self {
         Vec3D {x,y,z}
@@ -59,6 +54,7 @@ impl Vec3D {
             
         }
     }
+
     pub fn len(&self) -> f32 {
         (
             (self.x * self.x) + 
@@ -66,14 +62,15 @@ impl Vec3D {
             (self.z * self.z) 
         ).sqrt()
     }
+
     pub fn dot(&self, v2: &Vec3D) -> f32 {
         (self.x * v2.x) + 
         (self.y * v2.y) +
         (self.z * v2.z)
     }
 
-    pub fn project2(&self,
-        // _point: Vec3D,
+    pub fn project2(
+        &self,
         rotation: Vec3D,
         camera: Vec3D,
         fov: f32,
@@ -88,7 +85,6 @@ impl Vec3D {
         z_near = 0.1;
         z_far = 1000.0;
         fov = 90.0
-
         */
         //let z_near = z_near + camera.z;
 
@@ -99,6 +95,7 @@ impl Vec3D {
             .rot_z(rotation.z);
 
         let mut matrix = Matrix::new();
+
         matrix.m[0][0] = a * fov;
         matrix.m[1][1] = fov;
         matrix.m[2][2] = z_far / (z_far - z_near);
@@ -120,8 +117,6 @@ impl Vec3D {
         d.y *= height * 0.5;
 
         //d.x -= width / 0.5;
-
-
         // let bx = ((camera.z / d.z) * d.x) + camera.x;
         // let by = ((camera.z / d.z) * d.y) + camera.y;
 
@@ -174,88 +169,6 @@ impl Vec3D {
             z,
         }
     }
-    pub fn project(&self, c: &Vec3D, o: &Vec3D, e: &Vec3D, scale: (f32, f32, f32)) -> Vec2D {
-        /*
-        https://en.wikipedia.org/wiki/3D_projection
-
-        This function applies a perspective projection
-
-        self    = 3D postion to be projected
-        c       = 3D position of camera
-        o       = Orientation vector theta
-        e       = Display surface relative to c
-        */
-
-    //     let X = self.x - c.x;
-    //     let Y = self.y - c.y;
-    //     let Z = self.z - c.z;
-
-    //     let mut dx: f32;
-    //     let mut dy: f32;
-    //     let mut dz: f32;
-
-    //     let cx = o.x.cos(); 
-    //     let cy = o.y.cos();
-    //     let cz = o.z.cos();
-
-    //     let sx = o.x.sin();
-    //     let sy = o.y.sin();
-    //     let sz = o.z.sin();
-        
-    //    // println!("{:?}", (cx, cy, cz, sx, sy, sz));
-
-    //     dx = cy * ( (sz * Y) + (cz * X) ) - (sy * Z);
-
-    //     dy = sx * ( (cy * Z) + (sy * ((sz * Y) + (cz * X)) ) ) + ( cx * ((cz * Y) - (sz * X)) );
-    //     dz = cx * ( (cy * Z) + (sy * ((sz * Y) + (cz * X)) ) ) - ( sx * ((cz * Y) - (sz * X)) );
-       
-    //     // println!("x:{}\ny:{}\nz:{}",X,Y,Z);
-    //     // println!("dx:{}\ndy:{}\ndz:{}",dx, dy,dz);
-
-    //     let bx = ((e.z / dz) * dx) + e.x;
-    //     let by = ((e.z / dz) * dy) + e.y;
-
-    //     Vec2D {
-    //         x: bx,
-    //         y: by
-    //     }
-
-        let d = (*self - *c)//// subtract 
-            .rot_x(o.x)     // apply camera transformation x
-            .rot_y(o.y)     // apply camera transformation y
-            .rot_z(o.z)     // apply camera transformation z
-            //.scale(scale.0, scale.1, scale.2)    
-            ;    
-
-        let perspectivematrix = [
-            [1.0, 0.0, 0.0, 0.0],
-            [0.0, 1.0, 0.0, 0.0],
-            [0.0, 0.0, 1.0, 0.0]
-        ];   
-        // let f = d.multiply(coords);
-        //println!("{:?}",d);
-        //d.scale();
-        let bx = ((e.z / d.z) * d.x) + e.x;
-        let by = ((e.z / d.z) * d.y) + e.y;
-        // println!("{:?}", f);
-        // let bx = f.x/f.z;
-        // let by = f.y/f.z;
-        Vec2D {
-            x: bx,
-            y: by
-        }
-
-    }
-
-    // pub fn scale(&self, factor_x: f32, factor_y: f32, factor_z:f32) -> Self {
-    //     Vec3D {
-    //         x: self.x * factor_x,
-    //         y: self.y * factor_y,
-    //         z: self.z * factor_z
-    //         w:1.0
-    //     }
-    // }
-
 
     pub fn rot_x(self, angle:f32) -> Self {
         let rx =
@@ -358,16 +271,3 @@ fn test() {
     assert_eq!((1.0, 2.0, 3.0), tuple_3d);
 
 }
-
-//#[test]
-// fn test_projection() {
-//     //https://www.dreamincode.net/forums/topic/239174-3d-perspective-projection/
-//     let camera  = Vec3D::new(320.0, 240.0, 800.0);
-//     let angle   = Vec3D::new(0.0, 0.0, 0.0);
-//     let vector  = Vec3D::new(1.0, 1.0, 0.0);
-//     let plane   = Vec3D::new(600.0, 200.0, 1000.0);
-
-//     let projected = vector.project(&camera, &angle, &plane);
-//     println!("{:?}", projected);
-//     //assert_eq!(Vec2D{x:1.0, y:2.0}, projected);
-// }
