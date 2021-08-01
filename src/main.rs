@@ -18,8 +18,8 @@ use vector::{
     Vec3D,
     Vec2D
 };
-const WIDTH: usize = 1920;
-const HEIGHT: usize = 1080;
+const WIDTH: usize = 1280;
+const HEIGHT: usize = 720;
 static STAR_COLORS: [(f32,f32,f32,f32); 3] = [
     (0.966, 0.786, 1.0, 1.0), // light pink magenta
     //(0.752, 1.0, 1.0, 0.8), // light 
@@ -27,13 +27,12 @@ static STAR_COLORS: [(f32,f32,f32,f32); 3] = [
     (1.0, 1.0, 1.0, 1.0), // white
 ];
 fn main() {
-    // Make a Context.
 
     let (mut ctx, event_loop) = ContextBuilder::new("2D Parallax Stars", "B0ney")
         .window_mode(
             conf::WindowMode::default()
                 .dimensions(WIDTH as f32, HEIGHT as f32)
-                .fullscreen_type(conf::FullscreenType::True)
+                //.fullscreen_type(conf::FullscreenType::True)
                 //.resizable(true)
             )
         .window_setup(
@@ -70,7 +69,6 @@ impl EventHandler<ggez::GameError> for MyGame {
     fn update(&mut self, _ctx: &mut Context) -> GameResult<()> {
         // Update code here...
 
-
         if input::keyboard::is_key_pressed(&_ctx, KeyCode::Up) {
             self.starfield.add_star(10);
         };
@@ -85,9 +83,6 @@ impl EventHandler<ggez::GameError> for MyGame {
         if input::keyboard::is_key_pressed(&_ctx, KeyCode::Key2) {
             self.render_mode = 2;
         };
-
-
-
 
         if self.render_mode == 1 {
             let mouse_pos = input::mouse::position(_ctx);
@@ -160,7 +155,7 @@ impl EventHandler<ggez::GameError> for MyGame {
             for (index, (x, y, z)) in self.starfield.stars.iter().enumerate() {
 
                 if self.render_mode == 1 {
-                    
+
                     point = Vec2D::new((*x + 1.0) * (WIDTH as f32 * 0.5), (*y + 1.0) * (HEIGHT as f32 * 0.5) );
                 } else {
 
@@ -175,8 +170,6 @@ impl EventHandler<ggez::GameError> for MyGame {
                         1000.0,
                         );
                 }
-    
-                //println!("{}\n{}", point.x, point.y);
                 
                 mb.circle(
                     graphics::DrawMode::fill(),
