@@ -37,7 +37,7 @@ fn main() {
             )
         .window_setup(
             conf::WindowSetup::default()
-                .title("2D Parallax Stars")
+                .title("Stars")
                 //.icon("icon.png")
         )
         .build()
@@ -58,9 +58,9 @@ impl MyGame {
     pub fn new(_ctx: &mut Context) -> MyGame {
         MyGame {
             starfield: stars2::Stars::new(100, WIDTH as f32, HEIGHT as f32),
-            camera: Vec3D::new(0.0, 0.0, 0.0),
+            camera: Vec3D::new(-1.0, -0.75, 0.0),
             orientation: Vec3D::new(0.0, 0.0, 0.0),
-            render_mode: 2,
+            render_mode: 1,
         }
     }
 }
@@ -153,12 +153,10 @@ impl EventHandler<ggez::GameError> for MyGame {
             let mut point: Vec2D;
             
             for (index, (x, y, z)) in self.starfield.stars.iter().enumerate() {
-
                 if self.render_mode == 1 {
-
                     point = Vec2D::new((*x + 1.0) * (WIDTH as f32 * 0.5), (*y + 1.0) * (HEIGHT as f32 * 0.5) );
+                
                 } else {
-
                     point = Vec3D::project2(
                         &Vec3D::from((*x,*y,*z)),
                         self.orientation,
@@ -170,7 +168,6 @@ impl EventHandler<ggez::GameError> for MyGame {
                         1000.0,
                         );
                 }
-                
                 mb.circle(
                     graphics::DrawMode::fill(),
                     Point2{x: point.x, y: point.y},
@@ -179,7 +176,6 @@ impl EventHandler<ggez::GameError> for MyGame {
                     STAR_COLORS[index % STAR_COLORS.len()].into()
                 )?;
             };
-
             let m = mb.build(ctx)?;
 
             graphics::draw(ctx, &m, graphics::DrawParam::new())?;
@@ -189,8 +185,8 @@ impl EventHandler<ggez::GameError> for MyGame {
             " Stars: {}\n FPS: {}\n Up - Add Star\n Down - Delete Star\n\n 1 - 2D parallax Mode\n 2 - 3D mode\n\n W,A,S,D - Move 3D camera\n Z,X - 3D camera depth\n\n I,K - Pitch\n J,L - Yaw\n N,M - Roll ",
             &self.starfield.stars.len(),
             timer::fps(&ctx)
-        )); 
-
+            )
+        ); 
         graphics::draw(ctx, &text, graphics::DrawParam::new())?;
 
         graphics::present(ctx)

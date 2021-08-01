@@ -58,11 +58,11 @@ impl Stars {
     pub fn step(&mut self, dx: f32, dy: f32) {
         for (x, y, z) in self.stars.iter_mut() 
         {
-            *x += dx / (*z * 5.0).abs();
+            *x += dx / (*z * 10.0).abs();
 
             if *x > 1.0 {*x = -1.0} else if *x < -1.0 {*x = 1.0};
 
-            *y += dy / (*z * 5.0).abs();
+            *y += dy / (*z * 10.0).abs();
             
             if *y > 1.0 {*y = -1.0} else if *y < -1.0 {*y = 1.0};
         }

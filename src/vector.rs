@@ -18,8 +18,8 @@ pub struct Vec3D {
     pub x: f32,
     pub y: f32,
     pub z: f32,
-    //w: f32,
 }
+
 #[derive(PartialEq, Debug)]
 pub struct Vec2D {
     pub x: f32,
